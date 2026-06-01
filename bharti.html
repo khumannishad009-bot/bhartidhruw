@@ -1,0 +1,333 @@
+*Sports Information Website - Images ke sath code* 👇
+
+Sports news + match schedule wali website. Copy karke `sports.html` me save kar de.
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Hub - Live Scores & News</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0e27; color: #fff; }
+    header { background: linear-gradient(90deg, #ff6b35, #f7931e); padding: 20px; text-align: center; }
+    header h1 { font-size: 32px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+    nav { background: #1a1f3a; padding: 12px; text-align: center; position: sticky; top: 0; z-index: 10; }
+    nav button { background: #2d3561; color: white; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 25px; font-weight: 600; }
+    nav button.active { background: #ff6b35; }
+  .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
+  .section { display: none; }
+  .section.active { display: block; }
+    h2 { color: #ff6b35; margin-bottom: 20px; font-size: 24px; border-bottom: 2px solid #ff6b35; padding-bottom: 8px; }
+    
+    /* Live Score Card */
+    .live-score { background: linear-gradient(135deg, #1e3c72, #2a5298); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 2px solid #ff6b35; }
+    .match-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .team { display: flex; align-items: center; gap: 15px; flex: 1; }
+    .team img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; }
+    .score-box { text-align: center; padding: 0 20px; }
+    .score { font-size: 32px; font-weight: bold; color: #ff6b35; }
+    .live-tag { background: red; color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: 0.5; } }
+    
+    /* Match Schedule */
+    .schedule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .match-card { background: #1a1f3a; border-radius: 10px; overflow: hidden; border: 1px solid #2d3561; }
+    .match-header { background: #2d3561; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .match-header img { width: 25px; height: 25px; }
+    .match-body { padding: 15px; display: flex; justify-content: space-around; align-items: center; }
+    .match-team { text-align: center; }
+    .match-team img { width: 60px; height: 60px; border-radius: 50%; margin-bottom: 8px; }
+    .vs { font-size: 20px; font-weight: bold; color: #ff6b35; }
+    
+    /* Player Profiles */
+    .player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+    .player-card { background: #1a1f3a; border-radius: 12px; overflow: hidden; text-align: center; border: 1px solid #2d3561; transition: 0.3s; }
+    .player-card:hover { transform: translateY(-5px); border-color: #ff6b35; }
+    .player-card img { width: 100%; height: 220px; object-fit: cover; }
+    .player-info { padding: 15px; }
+    .player-info h3 { color: #ff6b35; margin-bottom: 5px; }
+    .player-stats { display: flex; justify-content: space-around; margin-top: 10px; font-size: 13px; }
+    .stat { background: #2d3561; padding: 5px 10px; border-radius: 5px; }
+    
+    /* News Section */
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+    .news-card { background: #1a1f3a; border-radius: 10px; overflow: hidden; border: 1px solid #2d3561; }
+    .news-card img { width: 100%; height: 200px; object-fit: cover; }
+    .news-content { padding: 15px; }
+    .news-content h3 { color: #fff; margin-bottom: 8px; font-size: 18px; }
+    .news-content p { color: #aaa; font-size: 14px; line-height: 1.5; }
+    .news-meta { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: #ff6b35; }
+    
+    .filter-row { margin-bottom: 20px; }
+    select { background: #1a1f3a; color: white; padding: 10px; border: 1px solid #2d3561; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏆 Sports Hub</h1>
+  <p>Live Scores, News & Match Schedules</p>
+</header>
+
+<nav>
+  <button onclick="showSection('scores')" class="active">Live Scores</button>
+  <button onclick="showSection('schedule')">Match Schedule</button>
+  <button onclick="showSection('players')">Player Profiles</button>
+  <button onclick="showSection('news')">News Section</button>
+</nav>
+
+<div class="container">
+  
+  <!-- 1. LIVE SCORE UPDATES -->
+  <div id="scores" class="section active">
+    <h2>🔴 Live Score Updates</h2>
+    <div class="live-score">
+      <div class="match-row">
+        <div class="team">
+          <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/1200px-Flag_of_India.svg.png" alt="IND">
+          <div>
+            <h3>INDIA</h3>
+            <p>245/6 (42.3)</p>
+          </div>
+        </div>
+        <div class="score-box">
+          <span class="live-tag">LIVE</span>
+          <div class="score">VS</div>
+          <p>ODI - World Cup</p>
+        </div>
+        <div class="team" style="justify-content: flex-end;">
+          <div style="text-align: right;">
+            <h3>AUSTRALIA</h3>
+            <p>Yet to bat</p>
+          </div>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Australia_%28converted%29.svg/1200px-Flag_of_Australia_%28converted%29.svg.png" alt="AUS">
+        </div>
+      </div>
+    </div>
+
+    <div class="live-score">
+      <div class="match-row">
+        <div class="team">
+          <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Real_Madrid_CF.svg/1200px-Real_Madrid_CF.svg.png" alt="RMA">
+          <div>
+            <h3>Real Madrid</h3>
+            <p>2</p>
+          </div>
+        </div>
+        <div class="score-box">
+          <span class="live-tag">LIVE</span>
+          <div class="score">2 - 1</div>
+          <p>78' La Liga</p>
+        </div>
+        <div class="team" style="justify-content: flex-end;">
+          <div style="text-align: right;">
+            <h3>Barcelona</h3>
+            <p>1</p>
+          </div>
+          <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/1200px-FC_Barcelona_%28crest%29.svg.png" alt="BAR">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MATCH SCHEDULE -->
+  <div id="schedule" class="section">
+    <h2>📅 Match Schedule</h2>
+    <div class="filter-row">
+      <select id="sportFilter" onchange="filterSchedule()">
+        <option value="all">All Sports</option>
+        <option value="cricket">Cricket</option>
+        <option value="football">Football</option>
+      </select>
+    </div>
+    <div class="schedule-grid" id="scheduleGrid"></div>
+  </div>
+
+  <!-- 3. PLAYER PROFILES -->
+  <div id="players" class="section">
+    <h2>⭐ Player Profiles</h2>
+    <div class="player-grid" id="playerGrid"></div>
+  </div>
+
+  <!-- 4. NEWS SECTION -->
+  <div id="news" class="section">
+    <h2>📰 Sports News</h2>
+    <div class="news-grid" id="newsGrid"></div>
+  </div>
+
+</div>
+
+<script>
+  const scheduleData = [
+    {
+      sport: "cricket", league: "World Cup", 
+      team1: {name: "IND", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/1200px-Flag_of_India.svg.png"},
+      team2: {name: "PAK", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Flag_of_Pakistan.svg/1200px-Flag_of_Pakistan.svg.png"},
+      date: "12 Oct 2026", time: "2:00 PM"
+    },
+    {
+      sport: "football", league: "Premier League",
+      team1: {name: "Man City", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Manchester_City_FC_badge.svg/1200px-Manchester_City_FC_badge.svg.png"},
+      team2: {name: "Arsenal", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/1200px-Arsenal_FC.svg.png"},
+      date: "13 Oct 2026", time: "9:30 PM"
+    },
+    {
+      sport: "cricket", league: "IPL",
+      team1: {name: "MI", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Mumbai_Indians_Logo.svg/1200px-Mumbai_Indians_Logo.svg.png"},
+      team2: {name: "CSK", logo: "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Chennai_Super_Kings_Logo.svg/1200px-Chennai_Super_Kings_Logo.svg.png"},
+      date: "15 Oct 2026", time: "7:30 PM"
+    }
+  ];
+
+  const playersData = [
+    {
+      name: "Virat Kohli", sport: "Cricket", country: "India",
+      image: "https://images.unsplash.com/photo-1624971494455-4b893c9b530a?w=400",
+      stats: {matches: 275, runs: "12,898", avg: "57.3"}
+    },
+    {
+      name: "Lionel Messi", sport: "Football", country: "Argentina",
+      image: "https://images.unsplash.com/photo-1570498839593-e565b39455fc?w=400",
+      stats: {matches: 1030, goals: "821", assists: "361"}
+    },
+    {
+      name: "MS Dhoni", sport: "Cricket", country: "India",
+      image: "https://images.unsplash.com/photo-1628891890529-21f5d76e6b65?w=400",
+      stats: {matches: 538, runs: "17,266", stumpings: "195"}
+    },
+    {
+      name: "Cristiano Ronaldo", sport: "Football", country: "Portugal",
+      image: "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=400",
+      stats: {matches: 1180, goals: "850", assists: "249"}
+    }
+  ];
+
+  const newsData = [
+    {
+      title: "India beats Australia by 6 wickets in World Cup Thriller",
+      desc: "Kohli's century leads India to victory. Team chases 280 in 48 overs with brilliant batting display.",
+      image: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=600",
+      category: "Cricket", date: "08 Oct 2026"
+    },
+    {
+      title: "Messi scores hat-trick as Inter Miami wins 4-1",
+      desc: "Lionel Messi shows vintage form with 3 goals and 1 assist in MLS clash against LA Galaxy.",
+      image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600",
+      category: "Football", date: "07 Oct 2026"
+    },
+    {
+      title: "IPL 2027 Auction: Top 5 Most Expensive Players",
+      desc: "Australian all-rounder breaks all records with ₹24 Cr bid. CSK and MI in bidding war.",
+      image: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=600",
+      category: "Cricket", date: "06 Oct 2026"
+    }
+  ];
+
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function renderSchedule(data = scheduleData) {
+    const grid = document.getElementById('scheduleGrid');
+    grid.innerHTML = '';
+    data.forEach(match => {
+      grid.innerHTML += `
+        <div class="match-card">
+          <div class="match-header">
+            <span>${match.league}</span>
+            <span>${match.date} | ${match.time}</span>
+          </div>
+          <div class="match-body">
+            <div class="match-team">
+              <img src="${match.team1.logo}" alt="${match.team1.name}">
+              <p><strong>${match.team1.name}</strong></p>
+            </div>
+            <div class="vs">VS</div>
+            <div class="match-team">
+              <img src="${match.team2.logo}" alt="${match.team2.name}">
+              <p><strong>${match.team2.name}</strong></p>
+            </div>
+          </div>
+        </div>`;
+    });
+  }
+
+  function filterSchedule() {
+    const sport = document.getElementById('sportFilter').value;
+    if(sport === 'all') renderSchedule(scheduleData);
+    else renderSchedule(scheduleData.filter(m => m.sport === sport));
+  }
+
+  function renderPlayers() {
+    const grid = document.getElementById('playerGrid');
+    grid.innerHTML = '';
+    playersData.forEach(player => {
+      grid.innerHTML += `
+        <div class="player-card">
+          <img src="${player.image}" alt="${player.name}">
+          <div class="player-info">
+            <h3>${player.name}</h3>
+            <p>${player.sport} | ${player.country}</p>
+            <div class="player-stats">
+              ${Object.entries(player.stats).map(([key, val]) => `
+                <div class="stat"><strong>${val}</strong><br>${key}</div>
+              `).join('')}
+            </div>
+          </div>
+        </div>`;
+    });
+  }
+
+  function renderNews() {
+    const grid = document.getElementById('newsGrid');
+    grid.innerHTML = '';
+    newsData.forEach(news => {
+      grid.innerHTML += `
+        <div class="news-card">
+          <img src="${news.image}" alt="${news.title}">
+          <div class="news-content">
+            <h3>${news.title}</h3>
+            <p>${news.desc}</p>
+            <div class="news-meta">
+              <span>${news.category}</span>
+              <span>${news.date}</span>
+            </div>
+          </div>
+        </div>`;
+    });
+  }
+
+  // Initial Load
+  renderSchedule();
+  renderPlayers();
+  renderNews();
+</script>
+
+</body>
+</html>
+
+
+### *Images ke sath kya-kya features:*
+
+Section | Image Use
+**Live Score Updates** | Team logos + flags. Real-time feel ke liye "LIVE" tag blinking
+**Match Schedule** | Team logos, league info. Filter by Cricket/Football
+**Player Profiles** | Players ki photos + stats cards. Hover effect bhi hai
+**News Section** | News ke sath badi images. Category + date bhi dikhega
+
+
+### *Important Points:*
+1. *Team Logos*: Wikipedia se liye hain, free use kar sakte ho
+2. *Player Photos*: Unsplash se liye hain. Real players ke liye official images use karna
+3. *Responsive*: Mobile pe sab ek ke niche ek aa jayega
+4. *Live Data*: Abhi dummy data hai. Real scores ke liye CricAPI ya API-Football use kar sakte ho
+
+*Real-time scores chahiye?* CricAPI free me 100 requests/day deta hai cricket ke liye.
+*Football API?* API-Football se Premier League, La Liga sab mil jayega.
+
+Aur kuch add karna hai jaise points table, video highlights, ya commentary? Batao.
